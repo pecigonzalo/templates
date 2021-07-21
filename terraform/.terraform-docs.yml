@@ -1,0 +1,20 @@
+---
+formatter: markdown table
+
+sections:
+  hide:
+    - data-sources
+    - resources
+    - modules
+
+sort:
+  enabled: true
+  by: required
+
+output:
+  file: README.md
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
