@@ -7,9 +7,13 @@
   outputs =
     { self, ... }@inputs:
     let
+      javaVersion = 20;
+
       overlays = [
         (final: prev: rec {
-          python = prev.python314;
+          jdk = prev."jdk${toString javaVersion}";
+          gradle = prev.gradle.override { java = jdk; };
+          kotlin = prev.kotlin.override { jre = jdk; };
         })
       ];
 
@@ -35,7 +39,6 @@
             };
           }
         );
-
     in
     {
       # Development environments output by this flake
@@ -50,20 +53,15 @@
           default = pkgs.mkShellNoCC {
             # The Nix packages provided in the environment
             packages = with pkgs; [
-              python
-              uv
-              ruff
-              ty
-              mypy
-
-              # For C stuff
-              stdenv.cc.cc
+              jdk
+              kotlin
+              maven
+              gradle
+              kotlin-language-server
             ];
 
             # Set any environment variables for your development environment
-            env = {
-              LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-            };
+            env = { };
 
             # Add any shell logic you want executed when the environment is activated
             shellHook = "";
