@@ -1,72 +1,42 @@
 {
+  description = "Python development template";
+
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
   outputs =
-    { self, ... }@inputs:
+    { nixpkgs, ... }:
     let
-      overlays = [
-        (final: prev: rec {
-          python = prev.python314;
-        })
-      ];
-
-      # The systems supported for this flake's outputs
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
         "aarch64-darwin"
       ];
 
-      # Helper for providing system-specific attributes
-      forEachSupportedSystem =
-        f:
-        inputs.nixpkgs.lib.genAttrs supportedSystems (
-          system:
-          f {
-            inherit system;
-            # Provides a system-specific, configured Nixpkgs
-            pkgs = import inputs.nixpkgs {
-              inherit system;
-              # Enable using unfree packages
-              config.allowUnfree = true;
-            };
-          }
-        );
-
+      forEachSupportedSystem = nixpkgs.lib.genAttrs supportedSystems;
     in
     {
-      # Development environments output by this flake
-
-      # To activate the default environment:
-      # nix develop
-      # Or if you use direnv:
-      # direnv allow
       devShells = forEachSupportedSystem (
-        { pkgs, system }:
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          python = pkgs.python314;
+        in
         {
-          default = pkgs.mkShellNoCC {
-            # The Nix packages provided in the environment
-            packages = with pkgs; [
+          default = pkgs.mkShell {
+            packages = [
               python
-              uv
-              ruff
-              ty
-              mypy
-
-              # For C stuff
-              stdenv.cc.cc
+              pkgs.uv
+              pkgs.ruff
+              pkgs.ty
+              pkgs.mypy
             ];
 
-            # Set any environment variables for your development environment
             env = {
-              LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+              UV_PYTHON = python.interpreter;
+              UV_PYTHON_DOWNLOADS = "never";
             };
-
-            # Add any shell logic you want executed when the environment is activated
-            shellHook = "";
           };
         }
       );

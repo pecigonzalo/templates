@@ -1,21 +1,28 @@
 repos:
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.12
+  - repo: local
     hooks:
       - id: terraform-fmt
+        name: terraform fmt
+        entry: terraform fmt -check -recursive
+        language: system
+        pass_filenames: false
       - id: terraform-validate
+        name: terraform validate
+        entry: bash -c 'terraform init -backend=false >/dev/null && terraform validate'
+        language: system
+        pass_filenames: false
       - id: tflint
-  - repo: https://github.com/terraform-docs/terraform-docs
-    rev: v0.14.1
-    hooks:
-      - id: terraform-docs-system
-        args: ["."]
-  - repo: git://github.com/pecigonzalo/pre-commit-terraform-vars
-    rev: v1.0.0
-    hooks:
-      - id: terraform-vars
+        name: tflint
+        entry: tflint --recursive
+        language: system
+        pass_filenames: false
+      - id: terraform-docs
+        name: terraform-docs
+        entry: terraform-docs .
+        language: system
+        pass_filenames: false
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace

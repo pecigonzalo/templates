@@ -1,5 +1,5 @@
 {
-  description = "Kotlin development template";
+  description = ".NET development template";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -21,22 +21,23 @@
         system:
         let
           pkgs = import nixpkgs { inherit system; };
-          jdk = pkgs.jdk21;
-          gradle = pkgs.gradle.override { java = jdk; };
-          kotlin = pkgs.kotlin.override { jre = jdk; };
+          inherit (pkgs) lib stdenv;
+          dotnetSdk = pkgs.dotnetCorePackages.sdk_10_0;
         in
         {
           default = pkgs.mkShellNoCC {
             packages = [
-              jdk
-              kotlin
-              gradle
-              pkgs.kotlin-language-server
+              dotnetSdk
+              pkgs.fsautocomplete
+            ]
+            ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
+              pkgs.csharp-ls
             ];
 
             env = {
-              JAVA_HOME = jdk.home;
-              GRADLE_OPTS = "-Dorg.gradle.java.home=${jdk.home}";
+              DOTNET_CLI_TELEMETRY_OPTOUT = "1";
+              DOTNET_NOLOGO = "1";
+              DOTNET_ROOT = "${dotnetSdk}";
             };
           };
         }

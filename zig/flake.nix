@@ -1,5 +1,5 @@
 {
-  description = "Kotlin development template";
+  description = "Zig development template";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -21,23 +21,13 @@
         system:
         let
           pkgs = import nixpkgs { inherit system; };
-          jdk = pkgs.jdk21;
-          gradle = pkgs.gradle.override { java = jdk; };
-          kotlin = pkgs.kotlin.override { jre = jdk; };
         in
         {
           default = pkgs.mkShellNoCC {
             packages = [
-              jdk
-              kotlin
-              gradle
-              pkgs.kotlin-language-server
+              pkgs.zig
+              pkgs.zls
             ];
-
-            env = {
-              JAVA_HOME = jdk.home;
-              GRADLE_OPTS = "-Dorg.gradle.java.home=${jdk.home}";
-            };
           };
         }
       );
