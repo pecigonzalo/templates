@@ -1,13 +1,12 @@
 const std = @import("std");
 
 pub fn main() void {
-    std.debug.print("Hello from Zig.\n", .{});
-}
+    var seen = [_]bool{false} ** 256;
 
-pub fn add(a: i32, b: i32) i32 {
-    return a + b;
-}
+    const word = "foo";
 
-test "add" {
-    try std.testing.expectEqual(@as(i32, 42), add(40, 2));
+    for (word) |char| {
+        if (seen[char]) std.debug.print("Duplicate character found: {c}\n", .{char});
+        seen[char] = true;
+    }
 }

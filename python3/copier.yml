@@ -1,0 +1,8 @@
+project_name:
+  type: str
+  help: Project name
+
+python_version:
+  type: str
+  help: Minimum Python version
+  default: "3.12"

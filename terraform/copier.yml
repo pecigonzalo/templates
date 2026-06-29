@@ -1,0 +1,13 @@
+project_name:
+  type: str
+  help: Project name
+
+aws_region:
+  type: str
+  help: AWS region
+  default: eu-central-1
+
+aws_profile:
+  type: str
+  help: AWS CLI profile name
+  default: default

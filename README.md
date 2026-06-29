@@ -2,20 +2,24 @@
 
 This folder holds [Copier](https://github.com/copier-org/copier) templates for local use.
 
-<!-- BEGIN_TF_DOCS -->
-## Requirements
+## Available templates
 
-No requirements.
+| Template | Description |
+| -------- | ----------- |
+| `terraform` | Terraform with AWS provider |
+| `python3` | Python 3 project |
+| `kotlin` | Kotlin/Gradle application |
+| `zig` | Zig application |
+| `dotnet` | .NET devshell (Nix) |
 
-## Providers
+## Usage
 
-No providers.
+```sh
+copier copy <path-to-templates>/<template> <destination>
+```
 
-## Inputs
+Example:
 
-No inputs.
-
-## Outputs
-
-No outputs.
-<!-- END_TF_DOCS -->
+```sh
+copier copy ./terraform ~/projects/my-infra
+```
