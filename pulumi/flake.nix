@@ -27,7 +27,6 @@
             packages = [
               pkgs.nodejs_22
               pkgs.pulumi
-              pkgs.pulumiPackages.pulumi-language-nodejs
               pkgs.pre-commit
             ];
           };
