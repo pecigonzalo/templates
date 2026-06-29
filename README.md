@@ -7,6 +7,7 @@ This folder holds [Copier](https://github.com/copier-org/copier) templates for l
 | Template | Description |
 | -------- | ----------- |
 | `terraform` | Terraform with AWS provider |
+| `pulumi` | Pulumi TypeScript with AWS provider |
 | `python3` | Python 3 project |
 | `kotlin` | Kotlin/Gradle application |
 | `zig` | Zig application |
